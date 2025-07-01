@@ -14,36 +14,11 @@ let package = Package(
     ],
     products: [
         .library(name: "OpenAIRealtime", type: .static, targets: ["OpenAIRealtime"]),
-        .library(name: "OpenAIRealtimeWebSocket", type: .static, targets: ["OpenAIRealtimeWebSocket"]),
-        .library(name: "OpenAIRealtimeWebRTC", type: .static, targets: ["OpenAIRealtimeWebRTC"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/stasel/WebRTC.git", branch: "latest")
+        .package(url: "https://github.com/stasel/WebRTC.git", branch: "latest"),
     ],
     targets: [
-        .target(
-            name: "OpenAIRealtime",
-            dependencies: [],
-            path: "./src",
-            exclude: [
-                "Connectors/WebSocketConnector.swift",
-                "Connectors/WebRTCConnector.swift",
-            ]
-        ),
-        .target(
-            name: "OpenAIRealtimeWebSocket",
-            dependencies: ["OpenAIRealtime"],
-            path: "./src/Connectors",
-            sources: ["WebSocketConnector.swift"]
-        ),
-        .target(
-            name: "OpenAIRealtimeWebRTC",
-            dependencies: [
-                "OpenAIRealtime",
-                .product(name: "WebRTC", package: "WebRTC"),
-            ],
-            path: "./src/Connectors",
-            sources: ["WebRTCConnector.swift"]
-        ),
+        .target(name: "OpenAIRealtime", dependencies: ["WebRTC"], path: "./src"),
     ]
 )
