@@ -474,14 +474,12 @@ extension Conversation {
         
         queuedSamples.push(event.itemId)
         
-        playerNode.scheduleBuffer(sample, at: nil, completionCallbackType: .dataPlayedBack) {
-            [weak self] _ in
-            guard let self else { return }
-            
-            self.queuedSamples.popFirst()
-            if self.queuedSamples.isEmpty {
-                Task { @MainActor in
-                    playerNode.pause()
+        playerNode.scheduleBuffer(sample, at: nil, completionCallbackType: .dataPlayedBack) { [weak self] _ in
+            Task { @MainActor in
+                guard let self = self else { return }
+                self.queuedSamples.popFirst()
+                if self.queuedSamples.isEmpty {
+                    self.playerNode.pause()
                 }
             }
         }
